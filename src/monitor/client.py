@@ -3,10 +3,8 @@ x_pos = 0
 y_pos = 0
 def get_latest_data():
     global x_pos, y_pos
-    if random.random() < 0.5:
-        return None
-    x_pos += random.uniform(-0.5, 0.5)
-    y_pos += random.uniform(-0.5, 0.5)
+    x_pos += random.uniform(-1.0, 1.0)
+    y_pos += random.uniform(-1.0, 1.0)
     return{
         "t":random.uniform(0,30),
         "roll":random.uniform(-5,5),
@@ -92,32 +90,16 @@ last_px = None
 last_py = None
 CENTER_X = 325
 CENTER_Y = 285
-SCALE = 20
+SCALE = 10
+map_area.create_oval( CENTER_X-4, CENTER_Y-4, CENTER_X+4, CENTER_Y+4, fill="green")
+map_area.create_text( CENTER_X, CENTER_Y-15, text="START")
 last_px = None
-last_py = None
-
-
+last_py=None
 
 def update_data():
     global current_marker
     global last_px
     global last_py
-
-    data = get_latest_data()
-
-    if data is None:
-        root.after(500, update_data)
-        return
-
-    px = CENTER_X + data["x"] * SCALE
-    py = CENTER_Y - data["y"] * SCALE
-
-def update_data():
-    global current_marker
-    global last_px
-    global last_py
-    x_pos = 0
-    y_pos = 0
     data = get_latest_data()
 
     if data is None:
@@ -171,32 +153,6 @@ def update_data():
 
     root.after(1000, update_data)
 
-    if state == "SEARCH":
-        state_value.config(text="探索中", bg="lightblue")
 
-    elif state == "APPROACH":
-        state_value.config(text="接近中", bg="orange")
-
-    elif state == "GOAL":
-        state_value.config(text="到達!", bg="red")
-
-    else:
-        state_value.config(text="不明", bg="gray")
-
-    if data["goal"]:
-        goal_value.config(text="検出!",bg="red",fg="white")
-    else:
-        goal_value.config(text="---", bg="lightgray", fg="black")
-
-    if data["color"] == "":
-        color_value.config(text="未検出")
-    else:
-        color_value.config(text=data["color"])
-
-    root.after(500, update_data)
-
-CENTER_X = 325
-CENTER_Y = 285
-SCALE = 20
 update_data()
 root.mainloop()
